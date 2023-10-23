@@ -1,8 +1,16 @@
-# React + Vite
+# MSD project
+## CornHub - An Online Learning Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Clone this repo and install dependencies:
 
-Currently, two official plugins are available:
+```shell
+  git clone https://github.com/helloitsurdvq/CornhubFrontend.git
+  cd CornhubFrontend
+  npm install
+```
+- Run frontend:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```shell
+  cd CornhubFrontend
+  npm run dev
+```
