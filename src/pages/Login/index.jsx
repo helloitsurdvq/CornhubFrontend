@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { useLogin } from "../../hooks/useLogin";
 import Button from "../../components/Button";
-import Input from "../../components/Input";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { Checkbox, FormControlLabel } from "@mui/material";
 
+import { Checkbox, FormControlLabel, TextField, Snackbar, Alert } from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import WarningIcon from "@mui/icons-material/Warning";
 
 function Copyright(props) {
   return (
@@ -20,6 +21,27 @@ function Copyright(props) {
 }
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorAlert, setErrorAlert] = useState(false);
+  const login = useLogin();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await login(email, password);
+      navigate("/");
+    } catch (err) {
+      console.log("err", err);
+      setErrorAlert(true);
+    }
+  };
+
+  const handleAlertClose = () => {
+    setErrorAlert(false);
+  };
+
   return (
     <div className="flex flex-col h-screen px-6 py-6 md:flex-row">
       <div
@@ -36,29 +58,47 @@ export default function Login() {
             <div className="p-3 mx-auto rounded-full bg-secondary-main">
               <LockOutlinedIcon />
             </div>
-            <h1 className="mt-4 text-2xl font-semibold">Sign in</h1>
+            <h1 className="mt-4 text-2xl font-semibold">Log in</h1>
           </div>
-          <form className="mt-8">
-            <div className="mb-2">
-              <Input
-                className="w-full p-3 border border-gray-300 rounded"
-                label="Email Address"
-                type="email"
-                placeholder="Email Address"
+          <Snackbar
+            open={errorAlert}
+            autoHideDuration={5000}
+            onClose={handleAlertClose}
+            message={
+              <div className="flex items-center">
+                <WarningIcon color="error" style={{ marginRight: "8px" }} />
+                <span>
+                  There was a problem logging in. Please check your email and
+                  password or create an account
+                </span>
+              </div>
+            }
+          />
+          <form className="mt-8" onSubmit={handleSubmit}>
+            <div>
+              <TextField
+                margin="normal"
                 required
                 fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
                 autoFocus
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="mb-4">
-              <Input
-                className="w-full p-3 border border-gray-300 rounded"
-                label="Password"
-                type="password"
-                placeholder="Password"
+              <TextField
+                margin="normal"
                 required
                 fullWidth
-                autoFocus
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div className="flex items-center mb-4">
@@ -67,7 +107,10 @@ export default function Login() {
                 label="Remember me"
               />
               <div className="flex items-end justify-end flex-1">
-                <Link to="/notfound" className="text-base font-semibold text-blue-500">
+                <Link
+                  to="/notfound"
+                  className="text-base font-semibold text-blue-500"
+                >
                   Forgot password?
                 </Link>
               </div>
@@ -75,7 +118,10 @@ export default function Login() {
             <Button label="Sign In" type="submit" className="mt-5" />
             <div className="mt-4 text-center">
               Don't have an account?{" "}
-              <Link to="/signup" className="text-base font-semibold text-blue-500">
+              <Link
+                to="/signup"
+                className="text-base font-semibold text-blue-500"
+              >
                 Sign up
               </Link>
             </div>
